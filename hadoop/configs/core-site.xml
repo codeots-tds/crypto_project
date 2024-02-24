@@ -1,0 +1,12 @@
+ <!-- Configures Hadoop core settings, like I/O settings that are common to HDFS and MapReduce. -->
+<configuration>
+    <property>
+        <name>fs.defaultFS</name>
+        <value>hdfs://localhost:9000</value>
+    </property>
+</configuration>
+
+
+<!-- fs.defaultFS: Specifies the URI of the file system to use. Setting it to hdfs://localhost:9000 tells 
+Hadoop to use HDFS as the default file system and to communicate with the HDFS namenode on localhost 
+port 9000. -->

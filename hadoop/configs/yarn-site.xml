@@ -1,0 +1,18 @@
+<!-- Configures settings for YARN, the resource management layer of Hadoop. -->
+
+<configuration>
+    <property>
+        <name>yarn.nodemanager.aux-services</name>
+        <value>mapreduce_shuffle</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.aux-services.mapreduce.shuffle.class</name>
+        <value>org.apache.hadoop.mapred.ShuffleHandler</value>
+    </property>
+</configuration>
+
+
+<!-- yarn.nodemanager.aux-services: Specifies the auxiliary services used by the NodeManager. 
+The mapreduce_shuffle service is required for MapReduce jobs to shuffle data.
+yarn.nodemanager.aux-services.mapreduce.shuffle.class: Specifies the class that handles the 
+shuffle of MapReduce data, necessary for MapReduce jobs to run under YARN. -->

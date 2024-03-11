@@ -5,6 +5,7 @@ import os
 import io
 from dotenv import load_dotenv, find_dotenv
 from time import sleep
+import json
 
 # dotenv_path = os.path.join(os.path.dirname(__file__), '..', '.env')
 dotenv_path = '/home/ra-terminal/Desktop/portfolio_projects/crypto_project/.env'
@@ -15,9 +16,9 @@ db_host = os.getenv('DB_HOST')
 db_user = os.getenv('DB_USER')
 db_pass = os.getenv('DB_PASSWORD')
 
-print("DB_HOST:", db_host)
-print("DB_USER:", db_user)
-print("DB_PASS:", db_pass)
+# print("DB_HOST:", db_host)
+# print("DB_USER:", db_user)
+# print("DB_PASS:", db_pass)
 
 def create_conn(max_retries = 5):
     retries = 0
@@ -28,7 +29,7 @@ def create_conn(max_retries = 5):
                 port=os.getenv('DB_PORT', '5432'),
                 database=os.getenv('DB_NAME'),
                 user=os.getenv('DB_USER', 'postgres'),
-                password=os.getenv('DB_PASSWORD', '1234')
+                password=os.getenv('DB_PASSWORD', '')
         )
             print(f"Dotenv path: {dotenv_path}")
             print("DB_HOST:", os.getenv('DB_HOST'))
@@ -53,10 +54,49 @@ def create_table(conn, cur, sql_st):
         print("Error: Issue creating table!")
         print(e)
 
+def gen_placeholder_vals(col_count):
+    return ', '.join(['%s'] * col_count)
 
-# def insert_data(data, sql_st, tablename):
-#     try:
-#         buffer = io.StringIO()
+def insert_data(conn, cur, tablename, filepath):
+    # col_num = len(colnames)
+    # placeholders = gen_placeholder_vals(col_num)
+    # colnames_str = ', '.join(colnames)  # Joins column names for SQL statement
+
+    try:
+        with open(filepath, 'r') as file:
+            for line in file:
+                data = json.loads(line)
+                # Dynamically extract values based on colnames
+                # print(data.keys())
+                print("Original data keys:", data.keys())
+                data['price_usd'] = data.pop('priceUsd', None)
+                print("Modified data keys:", data.keys())
+                colnames = list(data.keys())
+                col_num = len(colnames)
+                placeholders = gen_placeholder_vals(col_num)
+                colnames_str = ', '.join(colnames)  # Joins column names for SQL statement
+                values = tuple(data.get(col, None) for col in colnames)
+                # print(f"""
+                #     INSERT INTO {tablename} ({colnames_str})
+                #     VALUES ({placeholders})
+                # """, values)
+                cur.execute(f"""
+                    INSERT INTO {tablename} ({colnames_str})
+                    VALUES ({placeholders})
+                """, values)
+        conn.commit()
+        print("Data insertion complete.")
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(f"Error inserting data: {error}")
+        conn.rollback()  # Rollback on error
+
+def process_directory(conn, cur, tablename, directory):
+    for filename in os.listdir(directory):
+        if filename.startswith('part-') and not filename.endswith('_SUCCESS'):
+            filepath = os.path.join(directory, filename)
+            if os.path.isfile(filepath):
+                print(f"Processing file: {filepath}")
+                insert_data(conn, cur, tablename, filepath)
 
 def delete_table_data(sql_st, tablename):
     query = f'DELETE FROM {tablename}'
@@ -73,10 +113,17 @@ def delete_table_data(sql_st, tablename):
 
 conn = create_conn()
 cur = conn.cursor()
-insert_data_query = """COPY {subway_station_table} ({cols}) FROM STDIN WITH (FORMAT CSV, DELIMITER '\t')"""
-for table_query in create_table_queries:
-    create_table(conn, cur, table_query)
-    print('creating table...', table_query)
+# for table_query in create_table_queries:
+#     create_table(conn, cur, table_query)
+#     print('creating table...', table_query)
+
+tablename = 'btc_price_tbl'
+directory =  '/home/ra-terminal/Desktop/portfolio_projects/crypto_project/hadoop/data/temp_data'
+process_directory(conn, cur, tablename, directory)
+
+conn.commit()
+cur.close()
+conn.close()
 
 if __name__ == '__main__':
     # conn = create_conn()

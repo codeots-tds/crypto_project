@@ -5,3 +5,7 @@ app/__pycache__/
 /howto.readme
 .vscode
 hadoop/data/
+/spark/spark-warehouse
+/spark/spark_commands.readme
+/spark/spark_info.readme
+/spark/__pycache__/

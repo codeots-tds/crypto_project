@@ -1,4 +1,5 @@
 .env
+*.json
 app/__pycache__/
 /hadoop/hadoop_readme.md
 /hadoop/hadoop_commands.md
@@ -9,3 +10,7 @@ hadoop/data/
 /spark/spark_commands.readme
 /spark/spark_info.readme
 /spark/__pycache__/
+test-file.py
+.vscode/
+/airflow/airflow_readme.md
+/airflow/__pycache__/

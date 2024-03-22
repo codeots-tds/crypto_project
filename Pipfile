@@ -11,6 +11,7 @@ pyspark = "*"
 hdfs = "*"
 pandas = "*"
 pyarrow = "*"
+apache-airflow = "*"
 
 [dev-packages]
 

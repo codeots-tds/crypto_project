@@ -16,7 +16,8 @@
 # cc_history_url= 'https://api.coincap.io/v2/assets/bitcoin/history'
 
 # payload={
-#     'interval': 'd1',
+#     # 'interval': 'd1',
+#     'interval': 'm1',
 #     'start': start_timestamp,
 #     'end': end_timestamp
 # }
@@ -27,6 +28,6 @@
 # if response.status_code == 200:
 #     data = response.json()
 
-# print(data['data'][0])
+# # print(data['data'][0])
 
 

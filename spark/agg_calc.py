@@ -75,7 +75,7 @@ class Calc_Agg():
 
     def aggregate_report(self):
         self.crypto_price_df = self.crypto_price_df.astype({'price_usd': 'float'})
-        print(self.crypto_price_df.groupby('date')['price_usd'].nunique())
+        # print(self.crypto_price_df.groupby('date')['price_usd'].nunique())
         groupby_agg_df = self.crypto_price_df.groupby('date').agg({
         'price_usd': ['sum', 'mean', 'median', 'max', 
                     'min', 'mode', 'stddev_samp','stddev_pop', 

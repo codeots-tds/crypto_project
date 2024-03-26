@@ -11,8 +11,12 @@ pyspark = "*"
 hdfs = "*"
 pandas = "*"
 pyarrow = "*"
+apache-airflow = "*"
 
 [dev-packages]
 
 [requires]
 python_version = "3.9"
+
+[packages.connexion]
+extras = [ "swagger-ui",]

@@ -17,3 +17,6 @@ apache-airflow = "*"
 
 [requires]
 python_version = "3.9"
+
+[packages.connexion]
+extras = [ "swagger-ui",]

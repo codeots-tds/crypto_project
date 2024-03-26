@@ -15,27 +15,28 @@ default_args = {
     'retry_delay': timedelta(minutes=5)
 }
 
-@dag(default_args=default_args, 
+@dag(
+    dag_id='dag_fetch_crypto_data',
+    default_args=default_args, 
     schedule='0 0 * * *', 
     catchup=False, 
     start_date=datetime(2024, 1, 1), 
-    tags=['crypto'])
+    tags=['crypto'],
+    )
 
 #this function defines your DAG 
 def dag_fetch_crypto_data():
     @task
     def task_fetch_data():
-        # raw_data, call_timestamp = fetch_data(payload = payload, 
-        #                                   api_url = fetch_data.cc_history_url, 
-        #                                   headers = fetch_data.headers)
-        # return raw_data, call_timestamp
-        # Ensure these are correctly defined in fetch_data
         payload = fetch_data.create_payload('d1', fetch_data.start_timestamp, fetch_data.end_timestamp)
-        return fetch_data.fetch_data(payload, fetch_data.cc_history_url, fetch_data.headers)
+        raw_data, call_timestamp = fetch_data.fetch_data(payload, fetch_data.cc_history_url, fetch_data.headers)
+        # return fetch_data.fetch_data(payload, fetch_data.cc_history_url, fetch_data.headers)
+        return {'raw_data': raw_data, 'call_timestamp': call_timestamp}
 
     @task
     def task_process_data(data):
         processed_data = fetch_data.add_call_timestamp_to_data(data['raw_data'])
+        # return {'processed_data': processed_data, 'call_timestamp': data['call_timestamp']}
         return {'processed_data': processed_data, 'call_timestamp': data['call_timestamp']}
 
     @task    

@@ -32,11 +32,15 @@ def create_payload(time_interval, start_timestamp, end_timestamp):
     return payload
 
 def fetch_data(payload, api_url, headers):
+        raw_data = None
+        call_timestamp = None
         try:
             response = r.request("GET", api_url, headers=headers, params=payload)
             if response.status_code == 200:
                 raw_data = response.json()
-                call_timestamp = raw_data['timestamp']
+                print(raw_data.keys())
+                timestamp = raw_data.get('timestamp', None)
+                call_timestamp = raw_data.get('call_timestamp', timestamp)
             else:
                 print('API request failed with status code:', response.status_code)
         except r.exceptions.RequestException as e:

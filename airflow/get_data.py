@@ -50,29 +50,3 @@ def dag_fetch_crypto_data():
     task_save_data(processed_data)
 
 execute_dag = dag_fetch_crypto_data()
-
-# def get_crypto_data_pipeline():
-#     btc_data_obj = fetch_data.Get_Data(
-#             url = fetch_data.cc_history_url,
-#             headers = fetch_data.headers,
-#             cc_key = fetch_data.cc_key,
-#             )
-
-#     @task
-#     def fetch_data_task():
-#         btc_data_obj.create_payload(time_interval='d1')
-#         btc_data_obj.fetch_data()
-
-#     @task
-#     def add_call_timestamp_task():
-#         btc_data_obj.add_call_timestamp_to_data()
-
-#     @task()
-#     def save_data_to_local():
-#         btc_data_obj.savejson_hdfs(call_timestamp=btc_data_obj.call_timestamp)
-
-#     fetch_data_task_instance = fetch_data_task()
-#     add_call_timestamp_instance = add_call_timestamp_task()
-
-
-# dag = fetch_data_dag()

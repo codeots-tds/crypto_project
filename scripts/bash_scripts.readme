@@ -1,3 +1,6 @@
 #running bash scripts
 ./convert_json.sh /path/to/json_directory /path/to/output_directory
 ./convert_json.sh /home/ra-terminal/Desktop/portfolio_projects/crypto_project/app/data/datafiles /home/ra-terminal/Desktop/portfolio_projects/crypto_project/app/data/line_datafiles
+
+#making bash script executeable:
+chmod +x your_script_name.sh

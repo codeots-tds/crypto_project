@@ -1,5 +1,4 @@
 import pandas as pd
-from .crypto_schema import *
 import psycopg2
 import os
 import io
@@ -31,12 +30,12 @@ def create_conn(max_retries = 5):
                 user=os.getenv('DB_USER', 'postgres'),
                 password=os.getenv('DB_PASSWORD', '')
         )
-            print(f"Dotenv path: {dotenv_path}")
-            print("DB_HOST:", os.getenv('DB_HOST'))
-            print("DB_NAME:", os.getenv('DB_NAME'))
-            print("DB_USER:", os.getenv('DB_USER'))
-            print("DB_PASSWORD:", os.getenv('DB_PASSWORD'))
-            print('Connection successfull')
+            # print(f"Dotenv path: {dotenv_path}")
+            # print("DB_HOST:", os.getenv('DB_HOST'))
+            # print("DB_NAME:", os.getenv('DB_NAME'))
+            # print("DB_USER:", os.getenv('DB_USER'))
+            # print("DB_PASSWORD:", os.getenv('DB_PASSWORD'))
+            # print('Connection successfull')
             return conn
         except psycopg2.OperationalError as e:
             print('Unable to connect to the database, Retrying')
@@ -58,10 +57,6 @@ def gen_placeholder_vals(col_count):
     return ', '.join(['%s'] * col_count)
 
 def insert_data(conn, cur, tablename, filepath):
-    # col_num = len(colnames)
-    # placeholders = gen_placeholder_vals(col_num)
-    # colnames_str = ', '.join(colnames)  # Joins column names for SQL statement
-
     try:
         with open(filepath, 'r') as file:
             for line in file:

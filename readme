@@ -1,3 +1,6 @@
 Endpoint Info:
 https://docs.coincap.io/
 
+2. Run Airflow:
+- airflow webserver
+- airflow scheduler
